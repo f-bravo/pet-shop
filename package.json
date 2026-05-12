@@ -8,14 +8,16 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "validade:typecheck": "tsc --noEmit --skipLibCheck"
+    "validate:typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "next": "16.2.6",
+    "prisma": "^7.8.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@prisma/client": "^7.8.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
