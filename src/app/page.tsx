@@ -42,8 +42,8 @@ const appointments = [
 ];
 
 const getPeriod = (hour: number): AppointmentPeriodDay => {
-  if (hour >= 9 && hour < 12) 'morning';
-  if (hour >= 13 && hour < 18) 'afternoon';
+  if (hour >= 9 && hour < 12) return 'morning';
+  if (hour >= 13 && hour < 18) return 'afternoon';
   return 'evening';
 };
 
@@ -61,13 +61,13 @@ function groupAppointmentsByPeriod(
   }));
 
   const morningAppointments = transformeAppointments.filter(
-    (apt) => apt.period == 'morning'
+    (apt) => apt.period === 'morning'
   );
   const afternoonAppointments = transformeAppointments.filter(
-    (apt) => apt.period == 'morning'
+    (apt) => apt.period === 'morning'
   );
   const eveningAppointments = transformeAppointments.filter(
-    (apt) => apt.period == 'morning'
+    (apt) => apt.period === 'morning'
   );
 
   return [
@@ -108,7 +108,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="pd-24 mb:pb-0">
+      <div className="pb-24 mb:pb-0">
         {periods.map((period, index) => (
           <PeriodSection period={period} key={index} />
         ))}
