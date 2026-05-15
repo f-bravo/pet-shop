@@ -1,9 +1,12 @@
+import { AppointmentForm } from '@/components/appointment-form/appointment-form';
 import { PeriodSection } from '@/components/period-section';
 import { APPOINTMENT_DATA, groupAppointmentsByPeriod } from '@/utils';
 
-export default function Home() {
-  const periods = groupAppointmentsByPeriod(APPOINTMENT_DATA);
+export default async function Home() {
+  // const appoint = await prisma.appointment.findMany();
+  // console.log(appoint);
 
+  const periods = groupAppointmentsByPeriod(APPOINTMENT_DATA);
   return (
     <div className="bg-background-primary p-6">
       <div className="flex items-center justify-between mb-8">
@@ -21,6 +24,10 @@ export default function Home() {
         {periods.map((period, index) => (
           <PeriodSection period={period} key={index} />
         ))}
+      </div>
+
+      <div>
+        <AppointmentForm />
       </div>
     </div>
   );
