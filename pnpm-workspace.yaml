@@ -2,6 +2,7 @@ allowBuilds:
   '@prisma/client': true
   '@prisma/engines': true
   core-js: true
+  core-js-pure: true
   lefthook: true
   msw: true
   prisma: true
