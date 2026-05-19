@@ -34,7 +34,7 @@ import {
 } from 'lucide-react';
 
 import { IMaskInput } from 'react-imask';
-import { format, min, setHours, setMinutes, startOfToday } from 'date-fns';
+import { format, setHours, setMinutes, startOfToday } from 'date-fns';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
@@ -45,8 +45,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { Toast } from 'radix-ui';
 import { toast } from 'sonner';
+import { createAppointment } from '@/app/actions';
 
 const appointmentFormSchema = z
   .object({
@@ -78,7 +78,7 @@ const appointmentFormSchema = z
     },
     {
       path: ['time'],
-      error: ') horário não pode ser no passado.',
+      error: 'O horário não pode ser no passado.',
     }
   );
 
@@ -97,11 +97,17 @@ export const AppointmentForm = () => {
     },
   });
 
-  const onSubmit = (data: AppointFormValues) => {
+  const onSubmit = async (data: AppointFormValues) => {
     const [hour, minute] = data.time.split(':');
 
     const scheduleAt = new Date(data.scheduleAt);
     scheduleAt.setHours(Number(hour), Number(minute), 0, 0);
+
+    //Invoca o server action
+    await createAppointment({
+      ...data,
+      scheduleAt,
+    });
 
     toast.success(`Agendamento criado com sucesso!`);
 
