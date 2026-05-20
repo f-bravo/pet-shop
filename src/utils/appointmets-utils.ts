@@ -28,10 +28,10 @@ export function groupAppointmentsByPeriod(
     (apt) => apt.period === 'morning'
   );
   const afternoonAppointments = transformeAppointments.filter(
-    (apt) => apt.period === 'morning'
+    (apt) => apt.period === 'afternoon'
   );
   const eveningAppointments = transformeAppointments.filter(
-    (apt) => apt.period === 'morning'
+    (apt) => apt.period === 'evening'
   );
 
   return [
