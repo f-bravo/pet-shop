@@ -47,8 +47,10 @@ import {
 } from '../ui/select';
 import { toast } from 'sonner';
 import { createAppointment } from '@/app/actions';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Appointment } from '@/types/appointment';
 
+// Valida os campos do formulário antes de enviar para a Server Action
 const appointmentFormSchema = z
   .object({
     tutorName: z.string().min(3, 'O nome do tutor é obrigatório'),
@@ -68,6 +70,8 @@ const appointmentFormSchema = z
       })
       .min(1, 'A hora é obrigatória'),
   })
+
+  // Garante que a data e o horário escolhidos não estejam no passado
   .refine(
     (data) => {
       const [hour, minute] = data.time.split(':');
@@ -85,7 +89,15 @@ const appointmentFormSchema = z
 
 type AppointFormValues = z.infer<typeof appointmentFormSchema>;
 
-export const AppointmentForm = () => {
+type AppointmentFormProps = {
+  appointment?: Appointment;
+  children?: React.ReactNode;
+};
+
+export const AppointmentForm = ({
+  appointment,
+  children,
+}: AppointmentFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<AppointFormValues>({
@@ -103,10 +115,10 @@ export const AppointmentForm = () => {
   const onSubmit = async (data: AppointFormValues) => {
     const [hour, minute] = data.time.split(':');
 
+    // Combina a data selecionada com o horário escolhido no formulário
     const scheduleAt = new Date(data.scheduleAt);
     scheduleAt.setHours(Number(hour), Number(minute), 0, 0);
 
-    //Invoca o server action
     const result = await createAppointment({
       ...data,
       scheduleAt,
@@ -123,11 +135,14 @@ export const AppointmentForm = () => {
     form.reset();
   };
 
+  // Preenche o formulário quando for edição de um agendamento existente
+  useEffect(() => {
+    form.reset(appointment);
+  }, [appointment, form]);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="brand">Novo Agendamento</Button>
-      </DialogTrigger>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
 
       <DialogContent
         variant="appointment"
