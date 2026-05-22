@@ -1,12 +1,18 @@
 'use client';
 
-import { Calendar, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Calendar as CalendarIcon,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { Button } from '../ui/button';
-import { Popover, PopoverTrigger } from '../ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { addDays, format, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Calendar } from '../ui/calendar';
 
 export const DatePicker = () => {
   const router = useRouter();
@@ -14,6 +20,7 @@ export const DatePicker = () => {
   const searchParams = useSearchParams();
   const dateParam = searchParams.get('date');
 
+  // Lê a data da URL e converte para um objeto Date válido
   const getInitialDate = useCallback(() => {
     if (!dateParam) return;
 
@@ -27,6 +34,7 @@ export const DatePicker = () => {
   const [date, setDate] = useState<Date | undefined>(getInitialDate);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
+  // Atualiza o parâmetro "date" na URL para filtrar os agendamentos
   const updateURLWithDate = (selectedDate: Date | undefined) => {
     if (!selectedDate) return;
 
@@ -40,6 +48,12 @@ export const DatePicker = () => {
     updateURLWithDate(newDate);
   };
 
+  const handleDateSelect = (selectedData: Date | undefined) => {
+    updateURLWithDate(selectedData);
+    setIsPopoverOpen(false);
+  };
+
+  // Mantém o estado local sincronizado com a data presente na URL
   useEffect(() => {
     const newDate = getInitialDate();
 
@@ -61,9 +75,9 @@ export const DatePicker = () => {
             className="w-min[180px] justify-between text-left font-normal bg-transparent border-border-primary text-content-primary hover:bg-background-tertiary hover:border-border-secondary hover:text-content-primary focus-visible:ring-offset-0 focus-visible:ring-1 focus-visible:ring-border-brand focus:border-border-brand focus-visible:border-border-brand"
           >
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-content-brand" />
+              <CalendarIcon className="h-4 w-4 text-content-brand" />
               {date ? (
-                format(date, 'PPP', { locale: ptBR })
+                format(date, 'dd/MM/yyyy')
               ) : (
                 <span>Selecione uma data</span>
               )}
@@ -71,6 +85,15 @@ export const DatePicker = () => {
             <ChevronDown className="h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
+        <PopoverContent className="w-auto p-0">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={handleDateSelect}
+            autoFocus
+            locale={ptBR}
+          />
+        </PopoverContent>
       </Popover>
 
       <Button variant="outline" onClick={() => handleNavigateDay(1)}>
