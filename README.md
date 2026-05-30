@@ -1,4 +1,3 @@
-````md
 # Pet Shop
 
 Sistema fullstack para gerenciamento de agendamentos de um pet shop.
@@ -270,4 +269,3 @@ O projeto será apresentado em vídeo, demonstrando:
 - cadastro, edição e remoção de agendamentos;
 - testes manuais da aplicação em funcionamento;
 - validação local do projeto após clone, instalação, Docker, Prisma e execução da aplicação.
-````
